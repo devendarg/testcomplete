@@ -1,0 +1,51 @@
+﻿'USEUNIT CommonUtil
+'USEUNIT GlobalVariables
+'USEUNIT ObjectRepositoryUtil
+'USEUNIT BusinessFunctions
+
+
+'PerformAction(strTestCaseID, strStepNo, strStepDescription, strObjectName, strOperation, strInputValue)
+Function PerformAction(strTestCaseID, strStepNo, strStepDescription, strObjectName, strOperation, strInputValue)
+
+  If trim(strObjectName) <> Empty then
+    Log.Message "ObjectName = "&strObjectName
+    Set testObject = ConstructObject(strObjectName)
+  End If
+
+  Select Case strOperation
+    Case "LaunchBrowser"
+        result = LaunchBrowser(strInputValue)
+
+      Case "VerifyTitle"
+        result = VerifyTitle(strInputValue)
+      
+      Case "CloseBrowser"
+        result = CloseBrowser()
+      
+      Case "Click"
+        result = Click(testObject)
+ 
+      Case "SetText"
+        result = SetText(testObject, strInputValue)
+       
+      Case "IsLoggedIn"
+        result = VerifyIsLoggedIn(testObject)
+
+      Case "Wait"
+        If(strInputValue = "MIN_TIME") Then
+            MsgBox MIN_WAIT_TIME
+            aqUtils.Delay MIN_WAIT_TIME
+          elseIf(strInputValue = "MAX_TIME") Then
+            aqUtils.Delay MAX_WAIT_TIME
+          else 
+            aqUtils.Delay cint(strInputValue)
+        End If
+                  
+      Case Else
+        Log.Message "Invalid Operation please check test case sheet .....!"
+        Result = False
+  End Select
+ 
+  PerformAction = result
+
+End Function

@@ -1,0 +1,31 @@
+﻿'USEUNIT ObjectRepositoryUtil
+'USEUNIT PerformOperation
+'USEUNIT DriverScript
+
+Dim objParent
+Dim objExcel
+Dim objXML
+Dim BROWSERNAME
+Dim MIN_WAIT_TIME
+Dim MAX_WAIT_TIME
+
+ 
+Function createXMLInstance()
+  Set objXML = CreateObject("Msxml2.DOMDocument.6.0")
+  objXML.Async = True
+  'Set objXmlDoc = Sys.OleObject("Msxml2.DOMDocument.6.0")
+  objXML.Load(aqFileSystem.GetCurrentFolder&"\Resources\uiObjects.xml")
+  
+End Function
+
+Function initialteProjectVariables()
+ BROWSERNAME = "IE"
+ MIN_WAIT_TIME = 10000 ' 10 SECONDS
+ MAX_WAIT_TIME = 60000 ' 60 SECONDS
+End Function
+
+Function createBrowSerParent()
+
+ Set objParent = Sys.Browser("*").Page("*")
+  
+End Function

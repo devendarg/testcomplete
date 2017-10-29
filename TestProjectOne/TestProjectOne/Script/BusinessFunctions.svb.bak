@@ -1,0 +1,6 @@
+﻿'USEUNIT 
+
+Function VerifyIsLoggedIn(testObject)
+  res = IsElementPresent(testObject)  
+  VerifyIsLoggedIn = res
+End Function

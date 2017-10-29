@@ -1,0 +1,10 @@
+# this file contains the variable info for xxxxx project [Automation_testcomplete]
+
+BROWSERNAME=IE
+ApplicationName=HDFC
+ModuleToTest=Banking
+ServiceName=hdfc.com.in
+
+
+Click - pass objectname
+ClickWithText("Payment") - pass propertyvalue 

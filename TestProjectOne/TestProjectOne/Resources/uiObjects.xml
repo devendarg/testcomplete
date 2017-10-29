@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<ObjectRepository>
+
+	<!-- test objects for HDFC HomeLoan Login Page -->
+		<txtUserName>
+			<PropertyNames>idStr||ObjectType</PropertyNames>
+			<PropertyValues>tb_AccNo||Textbox</PropertyValues>
+		</txtUserName>
+
+		<txtPassword>
+			<PropertyNames>ObjectIdentifier</PropertyNames>
+			<PropertyValues>tb_pwd</PropertyValues>
+		</txtPassword>
+
+		<btnLogin>
+			<PropertyNames>ObjectIdentifier</PropertyNames>
+			<PropertyValues>bt_login</PropertyValues>
+		</btnLogin>
+
+		<lnkLogout>
+			<PropertyNames>contentText</PropertyNames>
+			<PropertyValues>Logout</PropertyValues>
+		</lnkLogout>
+
+
+</ObjectRepository>

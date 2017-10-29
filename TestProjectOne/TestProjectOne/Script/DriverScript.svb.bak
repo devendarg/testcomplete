@@ -1,0 +1,92 @@
+﻿'USEUNIT CommonUtil
+'USEUNIT GlobalVariables
+'USEUNIT PerformOperation
+
+'shoplenovo1@ndcommerce.in
+
+' This is the driver script to automate simple web application
+' get the data from wxcel sheet
+
+Function DriverScript
+  killProcess("'iexplore.exe'") ' terminatin all the IE processes
+  killProcess("'excel.exe'") ' terminatin all the excel processes
+  
+  Call createXMLInstance
+  Call initialteProjectVariables
+  'Call createBrowSerParent
+  strCurrentFolder = aqFileSystem.GetCurrentFolder
+  
+  Dim strFilePath
+  Dim objExcel
+  strFilePath = strCurrentFolder& "\Resources\DataDriver.xlsx"
+  
+  'Runner.Stop
+ 
+  ' Creating excel object instance to work with excel sheet
+  Set objExcel = CreateObject("Excel.Application")
+
+  Set objWorkBook = objExcel.WorkBooks.Open(strFilePath) 'Opening workbook
+  Set objWorkSheet = objWorkBook.WorkSheets("Suite") ' Opening worksheet
+  Set objTCSheet = objWorkBook.WorkSheets("TestCase") ' Opening worksheet
+    
+  rowCount = objWorkSheet.usedrange.rows.count 'getting rowcount from the suite sheet
+  'colCount = objWorkSheet.usedrange.columns.count
+  rowCountTCSheet = objTCSheet.usedrange.rows.count
+  'Select * from TestCase where TestCaseID = 'TS02'
+    
+  for rowIterator = 2 to rowCount ' iterating through test suite rows
+    strModuleName = objWorkSheet.cells(rowIterator, 2)
+    strScenarioID	= objWorkSheet.cells(rowIterator, 3)
+    strTCID	= objWorkSheet.cells(rowIterator, 4)
+    strExecute = objWorkSheet.cells(rowIterator, 5)
+    
+    If (strExecute="Yes") Then
+    
+      for tcSheetRow = 2 to rowCountTCSheet ' iterating through testcase rows
+        strTestCaseID = objTCSheet.cells(tcSheetRow, 1)
+    	
+        if (strTCID=strTestCaseID) then 
+          'Log.Message "execution started for "&strModuleName&strScenarioID&strTCID
+          strStepNo	= objTCSheet.cells(tcSheetRow, 2)
+          strStepDescription = objTCSheet.cells(tcSheetRow, 3)
+          strObjectName	= objTCSheet.cells(tcSheetRow, 4) ' Getting ObjctName
+          strOperation	= objTCSheet.cells(tcSheetRow, 5)
+          strInputValue	= objTCSheet.cells(tcSheetRow, 6)
+          strComments = objTCSheet.cells(tcSheetRow, 7)  
+          'Log.Message "Steps ::: "&strTCID&strStepNo&strStepDescription&strObjectName&strOperation&strInputValue
+            if strOperation="" or strOperation=empty then 
+                Log.Error "Operation Name should not be blank, please check data driver sheet...!"
+                Log.Message "Aborting the script execution"
+                Exit for
+              else 
+                  res = PerformAction(strTestCaseID, strStepNo, strStepDescription, strObjectName, strOperation, strInputValue)
+                Log.Message result
+            end if
+        
+        end If     
+             
+      Next
+      
+   End If
+   
+  Next
+
+  objWorkBook.close
+  objExcel.quit
+
+  killProcess("'iexplore.exe'") ' terminatin all the IE processes
+  killProcess("'excel.exe'") ' terminatin all the excel processes
+
+End Function
+
+Function test()
+
+  strOperation = "LaunchBrowser"
+  strInputValue = "https://online.hdfc.com/inet/"
+  Call initialteProjectVariables()
+  'call LaunchBrowser(strInputValue)
+  res = PerformOperation2("")
+  
+End Function
+
+

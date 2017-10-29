@@ -1,0 +1,105 @@
+﻿'USEUNIT ObjectRepositoryUtil
+'USEUNIT PerformOperation
+'USEUNIT GlobalVariables
+
+Function killProcess(processName)
+on error Resume Next
+  Dim objWMIService, objProcess, colProcess
+  Dim strComputer, strProcessKill 
+  strComputer = "."
+  strProcessKill = processName 
+  
+  Set objWMIService = GetObject("winmgmts:" _
+  & "{impersonationLevel=impersonate}!\\" _ 
+  & strComputer & "\root\cimv2")
+  
+  Set colProcess = objWMIService.ExecQuery _
+  ("Select * from Win32_Process Where Name = " & strProcessKill )
+  
+  For Each objProcess in colProcess
+  	objProcess.Terminate()
+  Next 
+  on error goto 0
+End Function
+
+Function LaunchBrowser(url)
+
+  if (BROWSERNAME="IE") then
+      Browsers.Item(btIExplorer).Run url  
+      Log.Message "Created Browser Instance and navigated to URL ::: "&url 
+      Call createBrowSerParent
+      LaunchBrowser = True
+    ElseIf (BROWSERNAME="Chrome") then
+      Browsers.Item(btChrome).Run url
+      Log.Message "Created Browser Instance and navigated to URL ::: "&url
+      Call createBrowSerParent
+      LaunchBrowser = True
+    ElseIf (BROWSERNAME = "Firefox") then
+      Browsers.Item(btFirefox).Run url
+      Log.Message "Created Browser Instance and navigated to URL ::: "&url
+      Call createBrowSerParent
+      LaunchBrowser = True
+    elseif (BROWSERNAME = "Edge") Then
+      Browsers.Item(btEdge).Run url
+      Log.Message "Created Browser Instance and navigated to URL ::: "&url
+      Call createBrowSerParent
+      LaunchBrowser = True
+  Else
+     Log.Error "Invalid Browser Selection", "BrowserName"&BrowserName
+     LaunchBrowser = False
+  end If
+  
+End Function
+
+Function VerifyTitle(expectedTitle)
+
+  actTitle = Sys.Browser("*").BrowserWindow(0).WndCaption
+  
+  If(expectedTitle=actTitle) then 
+      Log.Message "Title as Expected ::: "&actTitle
+    VerifyTitle = true
+    else 
+      Log.Error "Title is not as Expected ::: Expected :"&expectedTitle&"; Actual Title : "&actTitle
+      VerifyTitle = False
+  end if
+    
+End Function
+
+Function Click(testObject)
+  
+  testObject.Click
+  Log.Message "Clicked on the specified control"
+  Click = True
+End Function
+
+Function SetText(testObject, value)
+
+  testObject.SetText value
+  Log.Message "Entered value into textbox"
+  SetText = True
+  
+End Function
+
+Function IsElementPresent(testObject)
+
+  If(testObject.Exists) Then  
+      Log.Message "specified element present"
+      IsElementPresent = True
+    else 
+      Log.Error "specified element not present"
+      IsElementPresent = False    
+  End If  
+
+End Function
+
+Function CloseBrowser()
+
+  Sys.Browser("*").Page("*").Close  
+
+End Function
+
+
+
+
+
+

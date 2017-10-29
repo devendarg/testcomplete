@@ -1,0 +1,28 @@
+﻿'USEUNIT GlobalVariables
+
+Function ConstructObject(strObjectName)
+
+  strPropertyNameNode = "//ObjectRepository/"&strObjectName&"/PropertyNames"
+  strPropertyValueNode = "//ObjectRepository/"&strObjectName&"/PropertyValues"
+  
+  Set node = objXML.selectSingleNode(strPropertyNameNode)
+  propertyName = node.text
+  names = Split(propertyName, "||")
+  Log.Message "propertyName ::: "&propertyName
+  
+  Set node = objXML.selectSingleNode(strPropertyValueNode)
+  propertyValue = node.text
+  values = Split(propertyValue, "||")
+  Log.Message "propertyName :::"&propertyName
+  Set node = Nothing
+  
+  Set object = objParent.FindChild(names, values, 100)
+
+  If(object.exists) then 
+    Sys.HighlightObject object, 15
+    Else
+      Log.Error "Unable to find test object "&strObjectName&" with specified properties"
+    End If
+  Set ConstructObject = object 
+   
+End Function
